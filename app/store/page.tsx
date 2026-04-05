@@ -6,8 +6,8 @@ import { ArrowLeft, ShoppingCart, Trash2, ShieldCheck, Leaf, Loader2, Info, X, C
 import { useLanguage, useCart } from "../../store/useCart"; 
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // --- TRANSLATIONS FOR STORE UI ---
