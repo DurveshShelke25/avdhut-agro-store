@@ -1,30 +1,48 @@
-// app/api/checkout/route.ts
 import { NextResponse } from "next/server";
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+import { createClient } from "@supabase/supabase-js";
+
+// Initialize Supabase 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function POST(req: Request) {
   try {
-    const { items } = await req.json();
+    const { items, customer } = await req.json();
 
-    const lineItems = items.map((item: any) => ({
-      price_data: {
-        currency: "inr",
-        product_data: { name: item.name },
-        unit_amount: item.price * 100, // Stripe expects the amount in paise
-      },
-      quantity: 1,
-    }));
+    if (!items || items.length === 0) {
+      return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
+    }
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: lineItems,
-      mode: "payment",
-      success_url: `${req.headers.get("origin")}/success`,
-      cancel_url: `${req.headers.get("origin")}/`,
-    });
+    if (!customer || !customer.name || !customer.phone || !customer.address) {
+      return NextResponse.json({ error: "Incomplete address details" }, { status: 400 });
+    }
 
-    return NextResponse.json({ url: session.url });
+    // Calculate total amount
+    const totalAmount = items.reduce((acc: number, item: any) => acc + Number(item.price), 0);
+
+    // Save the Order to Supabase!
+    const { data, error } = await supabase
+      .from('orders')
+      .insert([
+        { 
+          customer_name: customer.name,
+          phone: customer.phone,
+          address: customer.address,
+          pincode: customer.pincode,
+          total_amount: totalAmount,
+          items: items 
+        }
+      ]);
+
+    if (error) {
+      throw error;
+    }
+
+    return NextResponse.json({ success: true, message: "Order saved successfully" });
+
   } catch (error: any) {
+    console.error("🔥 ORDER ERROR:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

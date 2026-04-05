@@ -1,21 +1,22 @@
-// app/success/page.tsx
 import Link from "next/link";
-import { Leaf } from "lucide-react";
+import { CheckCircle, Home } from "lucide-react";
 
-export default function Success() {
+export default function SuccessPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center max-w-md w-full">
-        <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-          <Leaf className="w-8 h-8" />
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 text-center">
+      <div className="bg-white p-12 rounded-3xl shadow-xl max-w-md w-full">
+        <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+          <CheckCircle className="w-12 h-12" />
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
-        <p className="text-gray-500 mb-8">Thank you for your purchase from Avdhut Agro. Your order is being processed.</p>
+        <h1 className="text-3xl font-black text-slate-800 mb-4">Payment Successful!</h1>
+        <p className="text-slate-500 mb-8">
+          Thank you for choosing Avdhut Agro. Your order has been placed and is being processed.
+        </p>
         <Link 
-          href="/" 
-          className="bg-green-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-700 transition w-full block"
+          href="/"
+          className="flex items-center justify-center gap-2 bg-slate-900 text-white px-8 py-4 rounded-2xl font-bold hover:bg-slate-800 transition shadow-lg"
         >
-          Return to Store
+          <Home className="w-5 h-5" /> Back to Home
         </Link>
       </div>
     </div>
